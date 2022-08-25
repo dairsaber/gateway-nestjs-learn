@@ -5,16 +5,11 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionsFilter } from './common/exceptions/http.exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { generateDocument } from './doc';
 
 declare const module: any;
 
 async function bootstrap() {
-  // 开启热更新
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
-
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
   // 接口版本化管理
@@ -31,6 +26,15 @@ async function bootstrap() {
 
   // 异常过滤器 注意这边的filter顺序 从后向前执行
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionsFilter());
+
+  // 创建文档
+  generateDocument(app);
+
+  // 开启热更新
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 
   await app.listen(3000);
 }
