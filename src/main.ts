@@ -6,7 +6,15 @@ import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionsFilter } from './common/exceptions/http.exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
+declare const module: any;
+
 async function bootstrap() {
+  // 开启热更新
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
   // 接口版本化管理
