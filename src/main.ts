@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionsFilter } from './common/exceptions/http.exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { generateDocument } from './doc';
+import { generateDocument } from './doc'; // swagger
 
 declare const module: any;
 
@@ -27,7 +27,7 @@ async function bootstrap() {
   // 异常过滤器 注意这边的filter顺序 从后向前执行
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionsFilter());
 
-  // 创建文档
+  // 创建swagger文档
   generateDocument(app);
 
   // 开启热更新
